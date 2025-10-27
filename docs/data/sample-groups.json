@@ -1,0 +1,59 @@
+{
+  "groups": [
+    {
+      "id": "group_001",
+      "name": "Kapadokya Gezisi 2025",
+      "description": "Yılbaşı tatili harcamaları",
+      "baseCurrency": "TRY",
+      "emoji": "🎈",
+      "avatarUrl": null,
+      "ownerId": "user_001",
+      "startDate": "2025-12-28T00:00:00Z",
+      "endDate": "2026-01-02T23:59:59Z",
+      "status": "Active",
+      "memberCount": 5,
+      "totalExpenses": 12,
+      "totalAmount": 2500000,
+      "createdAt": "2025-10-20T10:30:00Z",
+      "updatedAt": "2025-12-30T18:45:00Z",
+      "deletedAt": null
+    },
+    {
+      "id": "group_002",
+      "name": "Ev Arkadaşları",
+      "description": "Aylık ortak giderler",
+      "baseCurrency": "TRY",
+      "emoji": "🏠",
+      "avatarUrl": null,
+      "ownerId": "user_003",
+      "startDate": "2025-09-01T00:00:00Z",
+      "endDate": null,
+      "status": "Active",
+      "memberCount": 3,
+      "totalExpenses": 45,
+      "totalAmount": 1800000,
+      "createdAt": "2025-09-01T14:20:00Z",
+      "updatedAt": "2025-10-27T09:15:00Z",
+      "deletedAt": null
+    },
+    {
+      "id": "group_003",
+      "name": "Avrupa Turu",
+      "description": "3 haftalık Avrupa gezisi",
+      "baseCurrency": "EUR",
+      "emoji": "✈️",
+      "avatarUrl": null,
+      "ownerId": "user_005",
+      "startDate": "2025-06-15T00:00:00Z",
+      "endDate": "2025-07-05T23:59:59Z",
+      "status": "Archived",
+      "memberCount": 4,
+      "totalExpenses": 87,
+      "totalAmount": 4200,
+      "createdAt": "2025-05-10T11:00:00Z",
+      "updatedAt": "2025-07-10T20:30:00Z",
+      "deletedAt": null
+    }
+  ]
+}
+

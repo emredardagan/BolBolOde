@@ -1,0 +1,183 @@
+```mermaid
+graph TD
+    Start([App Açılış])
+    Start --> AuthCheck{Kullanıcı<br/>Giriş Yapmış?}
+    
+    AuthCheck -->|Hayır| AuthStack[Auth Stack]
+    AuthCheck -->|Evet| MainStack[Main Stack]
+    
+    %% AUTH STACK
+    AuthStack --> Login[Login Screen]
+    AuthStack --> Register[Register Screen]
+    AuthStack --> ForgotPassword[Forgot Password]
+    
+    Login --> MainStack
+    Register --> MainStack
+    
+    %% MAIN STACK (Tab Navigator)
+    MainStack --> TabNav{Tab Navigator}
+    
+    TabNav --> GroupsTab[Groups Tab]
+    TabNav --> ProfileTab[Profile Tab]
+    
+    %% GROUPS TAB FLOW
+    GroupsTab --> GroupList[Group List Screen]
+    GroupList --> CreateGroup[Create Group Screen]
+    GroupList --> GroupDetail[Group Detail Screen]
+    
+    GroupDetail --> ExpenseList[Expense List]
+    GroupDetail --> BalanceSummary[Balance Summary]
+    GroupDetail --> MemberList[Member List]
+    GroupDetail --> GroupSettings[Group Settings]
+    
+    ExpenseList --> AddExpense[Add Expense Screen]
+    ExpenseList --> ExpenseDetail[Expense Detail Screen]
+    
+    ExpenseDetail --> EditExpense[Edit Expense Screen]
+    
+    AddExpense --> SelectMembers[Select Members]
+    AddExpense --> SelectSplitType[Select Split Type]
+    AddExpense --> AttachReceipt[Attach Receipt]
+    
+    BalanceSummary --> SimplifyDebts[Simplify Debts Screen]
+    SimplifyDebts --> AddSettlement[Add Settlement Screen]
+    
+    GroupDetail --> InviteMembers[Invite Members Screen]
+    InviteMembers --> ShareLink[Share Invite Link]
+    InviteMembers --> ShowQR[Show QR Code]
+    
+    GroupDetail --> Reports[Reports Screen]
+    Reports --> ExportPDF[Export PDF]
+    Reports --> ExportCSV[Export CSV]
+    
+    %% PROFILE TAB FLOW
+    ProfileTab --> Profile[Profile Screen]
+    Profile --> EditProfile[Edit Profile Screen]
+    Profile --> Settings[Settings Screen]
+    
+    Settings --> NotificationSettings[Notification Settings]
+    Settings --> AppearanceSettings[Appearance Settings]
+    Settings --> LanguageSettings[Language Settings]
+    Settings --> About[About Screen]
+    Settings --> Legal[Legal Screen]
+    
+    Legal --> TermsOfService[Terms of Service]
+    Legal --> PrivacyPolicy[Privacy Policy]
+    
+    %% MODALS (can be opened from anywhere)
+    GroupDetail -.->|Modal| FilterExpenses[Filter Modal]
+    ExpenseList -.->|Modal| ExpenseOptions[Expense Options]
+    
+    %% DEEP LINKS
+    Notification([Push Notification]) -.->|Deep Link| ExpenseDetail
+    InviteLink([Invite Link]) -.->|Deep Link| JoinGroup[Join Group Flow]
+    
+    JoinGroup --> GroupDetail
+    
+    %% OFFLINE INDICATOR
+    OfflineQueue[Offline Queue] -.->|Badge| GroupsTab
+    OfflineQueue -.->|Icon| ExpenseList
+    
+    style AuthStack fill:#f9f,stroke:#333,stroke-width:2px
+    style MainStack fill:#bbf,stroke:#333,stroke-width:2px
+    style TabNav fill:#bfb,stroke:#333,stroke-width:2px
+    style GroupDetail fill:#ffb,stroke:#333,stroke-width:2px
+    style Notification fill:#fbb,stroke:#333,stroke-width:2px
+```
+
+## Navigasyon Katmanları
+
+### 1. Root Navigator (Stack)
+```
+RootNavigator
+  ├── AuthStack (conditional)
+  └── MainStack (conditional)
+```
+
+### 2. Auth Stack
+```
+AuthStack
+  ├── Login Screen
+  ├── Register Screen
+  └── Forgot Password Screen
+```
+
+### 3. Main Stack (Tab Navigator)
+```
+MainStack (Tab)
+  ├── Groups Tab (Stack)
+  │   ├── Group List
+  │   ├── Create Group
+  │   ├── Group Detail
+  │   │   ├── Expenses (Tab)
+  │   │   ├── Balance (Tab)
+  │   │   ├── Members (Tab)
+  │   │   └── Settings (Tab)
+  │   ├── Add/Edit Expense
+  │   ├── Expense Detail
+  │   ├── Simplify Debts
+  │   ├── Add Settlement
+  │   ├── Invite Members
+  │   └── Reports
+  │
+  └── Profile Tab (Stack)
+      ├── Profile
+      ├── Edit Profile
+      ├── Settings
+      ├── Notifications
+      ├── Appearance
+      ├── Language
+      └── Legal
+```
+
+### 4. Modals (Overlay)
+```
+Modals (can be opened from anywhere)
+  ├── Filter Expenses
+  ├── Expense Options (Edit/Delete)
+  ├── Split Type Selector
+  ├── Member Selector
+  └── Currency Picker
+```
+
+### 5. Deep Links
+```
+bolbolode://
+  ├── group/:groupId
+  ├── expense/:expenseId
+  ├── invite/:token
+  └── settlement/:settlementId
+```
+
+## Screen Transitions
+
+| From | To | Type | Animation |
+|------|----|----|-----------|
+| Login | Main | Replace | Fade |
+| Group List | Group Detail | Push | Slide Right |
+| Group Detail | Add Expense | Modal | Slide Up |
+| Expense List | Expense Detail | Push | Slide Right |
+| Balance | Simplify Debts | Push | Slide Right |
+| Any | Notification Target | Navigate | Fade |
+
+## Navigation Guards
+
+```typescript
+// Auth guard
+if (!user) {
+  navigation.navigate('Auth', { screen: 'Login' })
+}
+
+// Permission guard
+if (!canEditGroup(groupId)) {
+  Alert.alert('Yetkiniz yok')
+  return
+}
+
+// Network guard
+if (!isOnline && requiresOnline) {
+  Alert.alert('Bu işlem için internet gerekli')
+  return
+}
+```
+

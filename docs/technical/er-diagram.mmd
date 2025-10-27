@@ -1,0 +1,168 @@
+```mermaid
+erDiagram
+    User ||--o{ GroupMember : "is member of"
+    User ||--o{ Expense : "creates"
+    User ||--o{ Settlement : "creates"
+    User ||--o{ ActivityLog : "performs"
+    
+    Group ||--|{ GroupMember : "has members"
+    Group ||--|{ Expense : "contains"
+    Group ||--|{ Settlement : "tracks"
+    Group ||--o{ GroupInvite : "has invites"
+    Group ||--o{ ActivityLog : "logs activity"
+    
+    Expense ||--|{ ExpenseShare : "divided into"
+    Expense ||--o{ Attachment : "has attachments"
+    
+    GroupMember ||--o{ ExpenseShare : "owes"
+    GroupMember ||--o{ Settlement : "pays/receives"
+    
+    ExchangeRate ||--o{ Expense : "used in"
+
+    User {
+        string id PK
+        string email UK
+        string name
+        string avatar
+        string preferredCurrency
+        string locale
+        json notificationPreferences
+        timestamp createdAt
+        timestamp updatedAt
+    }
+    
+    Group {
+        string id PK
+        string name
+        string description
+        string baseCurrency
+        string emoji
+        string avatarUrl
+        string ownerId FK
+        timestamp startDate
+        timestamp endDate
+        string status
+        int memberCount
+        int totalExpenses
+        int totalAmount
+        timestamp createdAt
+        timestamp updatedAt
+        timestamp deletedAt
+    }
+    
+    GroupMember {
+        string id PK
+        string userId FK
+        string groupId FK
+        string role
+        string status
+        int netBalance
+        int totalPaid
+        int totalOwed
+        timestamp joinedAt
+        timestamp leftAt
+        string invitedBy FK
+    }
+    
+    Expense {
+        string id PK
+        string groupId FK
+        string title
+        string description
+        int amount
+        string amountFormatted
+        string currency
+        int baseCurrencyAmount
+        float fxRate
+        timestamp fxRateDate
+        string category
+        timestamp date
+        string payerId FK
+        string splitType
+        array participantIds
+        array attachments
+        array tags
+        string notes
+        string status
+        int version
+        string createdBy FK
+        timestamp createdAt
+        string updatedBy FK
+        timestamp updatedAt
+        timestamp deletedAt
+    }
+    
+    ExpenseShare {
+        string id PK
+        string expenseId FK
+        string memberId FK
+        string shareType
+        float weight
+        float percentage
+        int exactAmount
+        int calculatedAmount
+        timestamp createdAt
+    }
+    
+    Settlement {
+        string id PK
+        string groupId FK
+        string fromMemberId FK
+        string toMemberId FK
+        int amount
+        string currency
+        string paymentMethod
+        string notes
+        string status
+        timestamp date
+        string confirmedBy FK
+        timestamp confirmedAt
+        string createdBy FK
+        timestamp createdAt
+    }
+    
+    GroupInvite {
+        string id PK
+        string groupId FK
+        string token UK
+        string createdBy FK
+        int usageCount
+        int maxUsage
+        timestamp expiresAt
+        string status
+        timestamp createdAt
+    }
+    
+    ActivityLog {
+        string id PK
+        string groupId FK
+        string type
+        string actorId FK
+        string targetType
+        string targetId
+        json payload
+        json metadata
+        timestamp createdAt
+    }
+    
+    ExchangeRate {
+        string id PK
+        string from
+        string to
+        float rate
+        timestamp date
+        string source
+        timestamp createdAt
+    }
+    
+    Attachment {
+        string id PK
+        string url
+        string thumbnailUrl
+        string fileName
+        string mimeType
+        int size
+        timestamp uploadedAt
+    }
+```
+
