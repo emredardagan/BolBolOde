@@ -1,14 +1,13 @@
 {
   "name": "bolbolode",
   "version": "1.0.0",
-  "main": "expo-router",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "test": "jest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -34,21 +33,17 @@
     "react-native-reanimated": "~3.10.1",
     "react-native-gesture-handler": "~2.16.1",
     "date-fns": "^3.6.0",
-    "react-native-vector-icons": "^10.2.0",
     "@expo/vector-icons": "^14.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "@types/react": "~18.2.79",
-    "@types/react-native": "^0.73.0",
     "typescript": "^5.3.3",
     "tailwindcss": "^3.4.1",
     "eslint": "^8.57.0",
     "eslint-config-expo": "^7.1.2",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "jest": "^29.7.0",
-    "@testing-library/react-native": "^12.6.0"
+    "@typescript-eslint/parser": "^7.18.0"
   },
   "private": true
 }

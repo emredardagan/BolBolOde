@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AppNavigator from './src/navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import '../global.css';
+import './global.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
