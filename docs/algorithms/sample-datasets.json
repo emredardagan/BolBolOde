@@ -1,0 +1,386 @@
+{
+  "debtSettlement": {
+    "scenario1_simple": {
+      "description": "Basit 3 kişi senaryosu",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 50000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -30000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -20000 }
+        ]
+      },
+      "expectedOutput": {
+        "settlements": [
+          {
+            "fromMemberId": "B",
+            "fromMemberName": "Mehmet",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 30000
+          },
+          {
+            "fromMemberId": "C",
+            "fromMemberName": "Ayşe",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 20000
+          }
+        ],
+        "totalTransactions": 2
+      }
+    },
+    "scenario2_complex": {
+      "description": "Karmaşık 5 kişi senaryosu",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 100000 },
+          { "memberId": "B", "name": "Mehmet", "balance": 50000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -30000 },
+          { "memberId": "D", "name": "Fatma", "balance": -80000 },
+          { "memberId": "E", "name": "Ali", "balance": -40000 }
+        ]
+      },
+      "expectedOutput": {
+        "settlements": [
+          {
+            "fromMemberId": "D",
+            "fromMemberName": "Fatma",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 80000
+          },
+          {
+            "fromMemberId": "E",
+            "fromMemberName": "Ali",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 20000
+          },
+          {
+            "fromMemberId": "C",
+            "fromMemberName": "Ayşe",
+            "toMemberId": "B",
+            "toMemberName": "Mehmet",
+            "amount": 30000
+          },
+          {
+            "fromMemberId": "E",
+            "fromMemberName": "Ali",
+            "toMemberId": "B",
+            "toMemberName": "Mehmet",
+            "amount": 20000
+          }
+        ],
+        "totalTransactions": 4
+      }
+    },
+    "scenario3_equal": {
+      "description": "Eşit bakiye senaryosu",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 10000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -10000 }
+        ]
+      },
+      "expectedOutput": {
+        "settlements": [
+          {
+            "fromMemberId": "B",
+            "fromMemberName": "Mehmet",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 10000
+          }
+        ],
+        "totalTransactions": 1
+      }
+    },
+    "scenario4_multiple_creditors": {
+      "description": "Çoklu alacaklı senaryosu",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 60000 },
+          { "memberId": "B", "name": "Mehmet", "balance": 40000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -100000 }
+        ]
+      },
+      "expectedOutput": {
+        "settlements": [
+          {
+            "fromMemberId": "C",
+            "fromMemberName": "Ayşe",
+            "toMemberId": "A",
+            "toMemberName": "Ahmet",
+            "amount": 60000
+          },
+          {
+            "fromMemberId": "C",
+            "fromMemberName": "Ayşe",
+            "toMemberId": "B",
+            "toMemberName": "Mehmet",
+            "amount": 40000
+          }
+        ],
+        "totalTransactions": 2
+      }
+    },
+    "scenario5_large_group": {
+      "description": "Büyük grup senaryosu (10 kişi)",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 500000 },
+          { "memberId": "B", "name": "Mehmet", "balance": 300000 },
+          { "memberId": "C", "name": "Ayşe", "balance": 200000 },
+          { "memberId": "D", "name": "Fatma", "balance": -150000 },
+          { "memberId": "E", "name": "Ali", "balance": -200000 },
+          { "memberId": "F", "name": "Zeynep", "balance": -250000 },
+          { "memberId": "G", "name": "Can", "balance": -150000 },
+          { "memberId": "H", "name": "Deniz", "balance": -100000 },
+          { "memberId": "I", "name": "Ege", "balance": -100000 },
+          { "memberId": "J", "name": "Elif", "balance": -50000 }
+        ]
+      },
+      "expectedOutput": {
+        "totalTransactions": 9,
+        "note": "Greedy algoritma sonucu, optimal olmayabilir"
+      }
+    }
+  },
+  "currencyConversion": {
+    "scenario1_try_to_usd": {
+      "description": "TRY → USD dönüşümü",
+      "input": {
+        "amount": 32500,
+        "from": "TRY",
+        "to": "USD",
+        "rate": 32.5
+      },
+      "expectedOutput": {
+        "convertedAmount": 10000,
+        "rate": 32.5
+      }
+    },
+    "scenario2_usd_to_try": {
+      "description": "USD → TRY dönüşümü",
+      "input": {
+        "amount": 10000,
+        "from": "USD",
+        "to": "TRY",
+        "rate": 32.5
+      },
+      "expectedOutput": {
+        "convertedAmount": 325000,
+        "rate": 32.5
+      }
+    },
+    "scenario3_eur_to_gbp": {
+      "description": "EUR → GBP dönüşümü",
+      "input": {
+        "amount": 10000,
+        "from": "EUR",
+        "to": "GBP",
+        "rate": 0.85
+      },
+      "expectedOutput": {
+        "convertedAmount": 8500,
+        "rate": 0.85
+      }
+    },
+    "scenario4_same_currency": {
+      "description": "Aynı para birimi",
+      "input": {
+        "amount": 50000,
+        "from": "TRY",
+        "to": "TRY"
+      },
+      "expectedOutput": {
+        "convertedAmount": 50000,
+        "rate": 1.0
+      }
+    }
+  },
+  "balanceCalculation": {
+    "scenario1_equal_split": {
+      "description": "Eşit paylaşım senaryosu",
+      "input": {
+        "expenses": [
+          {
+            "id": "exp1",
+            "amount": 30000,
+            "payerId": "A",
+            "participantIds": ["A", "B", "C"],
+            "splitType": "equal"
+          }
+        ],
+        "members": [
+          { "id": "A", "userId": "Ahmet" },
+          { "id": "B", "userId": "Mehmet" },
+          { "id": "C", "userId": "Ayşe" }
+        ]
+      },
+      "expectedOutput": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 20000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -10000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -10000 }
+        ]
+      }
+    },
+    "scenario2_multiple_expenses": {
+      "description": "Çoklu harcama senaryosu",
+      "input": {
+        "expenses": [
+          {
+            "id": "exp1",
+            "amount": 20000,
+            "payerId": "A",
+            "participantIds": ["A", "B"],
+            "splitType": "equal"
+          },
+          {
+            "id": "exp2",
+            "amount": 30000,
+            "payerId": "B",
+            "participantIds": ["A", "B", "C"],
+            "splitType": "equal"
+          },
+          {
+            "id": "exp3",
+            "amount": 10000,
+            "payerId": "C",
+            "participantIds": ["C"],
+            "splitType": "equal"
+          }
+        ],
+        "members": [
+          { "id": "A", "userId": "Ahmet" },
+          { "id": "B", "userId": "Mehmet" },
+          { "id": "C", "userId": "Ayşe" }
+        ]
+      },
+      "expectedOutput": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 5000 },
+          { "memberId": "B", "name": "Mehmet", "balance": 5000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -10000 }
+        ]
+      }
+    }
+  },
+  "rounding": {
+    "scenario1_3_people": {
+      "description": "3 kişi eşit paylaşım",
+      "input": {
+        "totalAmount": 10000,
+        "count": 3
+      },
+      "expectedOutput": {
+        "shares": [3334, 3333, 3333],
+        "sum": 10000
+      }
+    },
+    "scenario2_5_people": {
+      "description": "5 kişi eşit paylaşım",
+      "input": {
+        "totalAmount": 10000,
+        "count": 5
+      },
+      "expectedOutput": {
+        "shares": [2000, 2000, 2000, 2000, 2000],
+        "sum": 10000
+      }
+    },
+    "scenario3_7_people": {
+      "description": "7 kişi eşit paylaşım",
+      "input": {
+        "totalAmount": 10000,
+        "count": 7
+      },
+      "expectedOutput": {
+        "shares": [1429, 1429, 1429, 1429, 1428, 1428, 1428],
+        "sum": 10000
+      }
+    },
+    "scenario4_rounding_error": {
+      "description": "Yuvarlama hatası düzeltme",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 10001 },
+          { "memberId": "B", "name": "Mehmet", "balance": -10000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -1 }
+        ]
+      },
+      "expectedOutput": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 10000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -10000 },
+          { "memberId": "C", "name": "Ayşe", "balance": 0 }
+        ]
+      }
+    }
+  },
+  "edgeCases": {
+    "scenario1_minimum_amount": {
+      "description": "Minimum transfer tutarı",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 50 },
+          { "memberId": "B", "name": "Mehmet", "balance": -50 }
+        ],
+        "minimumAmount": 100
+      },
+      "expectedOutput": {
+        "settlements": [],
+        "totalTransactions": 0
+      }
+    },
+    "scenario2_zero_balances": {
+      "description": "Sıfır bakiyeler",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 0 },
+          { "memberId": "B", "name": "Mehmet", "balance": 0 },
+          { "memberId": "C", "name": "Ayşe", "balance": 0 }
+        ]
+      },
+      "expectedOutput": {
+        "settlements": [],
+        "totalTransactions": 0
+      }
+    },
+    "scenario3_single_person": {
+      "description": "Tek kişi (hata durumu)",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 0 }
+        ]
+      },
+      "expectedError": "En az 2 kişi gerekli"
+    },
+    "scenario4_invalid_total": {
+      "description": "Geçersiz toplam (hata durumu)",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 10000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -20000 }
+        ]
+      },
+      "expectedError": "Bakiye toplamı sıfır değil: -10000"
+    },
+    "scenario5_large_numbers": {
+      "description": "Çok büyük sayılar",
+      "input": {
+        "balances": [
+          { "memberId": "A", "name": "Ahmet", "balance": 100000000 },
+          { "memberId": "B", "name": "Mehmet", "balance": -50000000 },
+          { "memberId": "C", "name": "Ayşe", "balance": -50000000 }
+        ]
+      },
+      "expectedOutput": {
+        "totalTransactions": 2,
+        "note": "Büyük sayılarla çalışabilmeli"
+      }
+    }
+  }
+}
+

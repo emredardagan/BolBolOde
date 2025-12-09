@@ -1,0 +1,196 @@
+{
+  "settlements": [
+    {
+      "id": "settlement_001",
+      "groupId": "group_001",
+      "fromMemberId": "member_002",
+      "toMemberId": "member_001",
+      "amount": 180000,
+      "currency": "TRY",
+      "paymentMethod": "BankTransfer",
+      "notes": "Kapadokya gezisi için ödeme",
+      "status": "Confirmed",
+      "date": "2026-01-05T14:30:00Z",
+      "confirmedBy": "member_001",
+      "confirmedAt": "2026-01-05T14:35:00Z",
+      "createdBy": "user_002",
+      "createdAt": "2026-01-05T14:30:00Z"
+    },
+    {
+      "id": "settlement_002",
+      "groupId": "group_001",
+      "fromMemberId": "member_003",
+      "toMemberId": "member_001",
+      "amount": 180000,
+      "currency": "TRY",
+      "paymentMethod": "Cash",
+      "notes": null,
+      "status": "Confirmed",
+      "date": "2026-01-05T15:00:00Z",
+      "confirmedBy": "member_001",
+      "confirmedAt": "2026-01-05T15:05:00Z",
+      "createdBy": "user_003",
+      "createdAt": "2026-01-05T15:00:00Z"
+    },
+    {
+      "id": "settlement_003",
+      "groupId": "group_001",
+      "fromMemberId": "member_004",
+      "toMemberId": "member_001",
+      "amount": 180000,
+      "currency": "TRY",
+      "paymentMethod": "MobilePay",
+      "notes": "Papara ile ödendi",
+      "status": "Pending",
+      "date": "2026-01-05T16:00:00Z",
+      "confirmedBy": null,
+      "confirmedAt": null,
+      "createdBy": "user_004",
+      "createdAt": "2026-01-05T16:00:00Z"
+    },
+    {
+      "id": "settlement_004",
+      "groupId": "group_002",
+      "fromMemberId": "member_007",
+      "toMemberId": "member_006",
+      "amount": 40000,
+      "currency": "TRY",
+      "paymentMethod": "BankTransfer",
+      "notes": "Ekim ayı elektrik faturası payı",
+      "status": "Confirmed",
+      "date": "2025-10-20T10:00:00Z",
+      "confirmedBy": "member_006",
+      "confirmedAt": "2025-10-20T10:15:00Z",
+      "createdBy": "user_007",
+      "createdAt": "2025-10-20T10:00:00Z"
+    },
+    {
+      "id": "settlement_005",
+      "groupId": "group_002",
+      "fromMemberId": "member_008",
+      "toMemberId": "member_006",
+      "amount": 40000,
+      "currency": "TRY",
+      "paymentMethod": "CreditCard",
+      "notes": null,
+      "status": "Confirmed",
+      "date": "2025-10-20T11:00:00Z",
+      "confirmedBy": "member_006",
+      "confirmedAt": "2025-10-20T11:05:00Z",
+      "createdBy": "user_008",
+      "createdAt": "2025-10-20T11:00:00Z"
+    },
+    {
+      "id": "settlement_006",
+      "groupId": "group_003",
+      "fromMemberId": "member_010",
+      "toMemberId": "member_009",
+      "amount": 187500,
+      "currency": "EUR",
+      "baseCurrencyAmount": 6468750,
+      "paymentMethod": "BankTransfer",
+      "notes": "Airbnb ödemesi - EUR bazlı",
+      "status": "Confirmed",
+      "date": "2025-06-25T09:00:00Z",
+      "confirmedBy": "member_009",
+      "confirmedAt": "2025-06-25T09:10:00Z",
+      "createdBy": "user_010",
+      "createdAt": "2025-06-25T09:00:00Z"
+    },
+    {
+      "id": "settlement_007",
+      "groupId": "group_003",
+      "fromMemberId": "member_011",
+      "toMemberId": "member_009",
+      "amount": 187500,
+      "currency": "EUR",
+      "baseCurrencyAmount": 6468750,
+      "paymentMethod": "Cash",
+      "notes": null,
+      "status": "Confirmed",
+      "date": "2025-06-25T10:00:00Z",
+      "confirmedBy": "member_009",
+      "confirmedAt": "2025-06-25T10:05:00Z",
+      "createdBy": "user_011",
+      "createdAt": "2025-06-25T10:00:00Z"
+    },
+    {
+      "id": "settlement_008",
+      "groupId": "group_003",
+      "fromMemberId": "member_012",
+      "toMemberId": "member_009",
+      "amount": 187500,
+      "currency": "EUR",
+      "baseCurrencyAmount": 6468750,
+      "paymentMethod": "MobilePay",
+      "notes": "Revolut ile ödendi",
+      "status": "Pending",
+      "date": "2025-06-25T11:00:00Z",
+      "confirmedBy": null,
+      "confirmedAt": null,
+      "createdBy": "user_012",
+      "createdAt": "2025-06-25T11:00:00Z"
+    },
+    {
+      "id": "settlement_009",
+      "groupId": "group_001",
+      "fromMemberId": "member_005",
+      "toMemberId": "member_003",
+      "amount": 150000,
+      "currency": "TRY",
+      "paymentMethod": "BankTransfer",
+      "notes": "Balon turu payı",
+      "status": "Rejected",
+      "date": "2026-01-06T12:00:00Z",
+      "confirmedBy": null,
+      "confirmedAt": null,
+      "createdBy": "user_005",
+      "createdAt": "2026-01-06T12:00:00Z"
+    },
+    {
+      "id": "settlement_010",
+      "groupId": "group_002",
+      "fromMemberId": "member_006",
+      "toMemberId": "member_007",
+      "amount": 25000,
+      "currency": "TRY",
+      "paymentMethod": "Cash",
+      "notes": "Market alışverişi farkı",
+      "status": "Confirmed",
+      "date": "2025-10-15T18:00:00Z",
+      "confirmedBy": "member_007",
+      "confirmedAt": "2025-10-15T18:05:00Z",
+      "createdBy": "user_006",
+      "createdAt": "2025-10-15T18:00:00Z"
+    }
+  ],
+  "settlementStatistics": {
+    "totalSettlements": 10,
+    "byStatus": {
+      "Confirmed": 7,
+      "Pending": 2,
+      "Rejected": 1
+    },
+    "byPaymentMethod": {
+      "BankTransfer": 4,
+      "Cash": 3,
+      "MobilePay": 2,
+      "CreditCard": 1
+    },
+    "totalAmount": {
+      "TRY": 1025000,
+      "EUR": 562500
+    },
+    "averageSettlementAmount": {
+      "TRY": 128125,
+      "EUR": 187500
+    }
+  },
+  "notes": {
+    "currencyHandling": "Settlements can be in different currencies than group base currency. Base currency amount is calculated using the exchange rate at settlement time.",
+    "statusFlow": "Settlements start as 'Pending', can be 'Confirmed' by the receiving member, or 'Rejected' if there's a dispute.",
+    "confirmation": "Only the receiving member (toMemberId) can confirm a settlement. Once confirmed, it affects the group balances.",
+    "rejection": "Rejected settlements do not affect balances and should be reviewed by group members."
+  }
+}
+

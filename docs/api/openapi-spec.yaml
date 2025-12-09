@@ -1,0 +1,408 @@
+openapi: 3.0.3
+info:
+  title: BölBölÖde API
+  description: |
+    BölBölÖde - Bill Splitting Uygulaması için Firebase Cloud Functions API Spesifikasyonu.
+    
+    Bu API, Firebase Authentication ile korunur ve tüm endpoint'ler authenticated kullanıcılar için tasarlanmıştır.
+  version: 1.0.0
+  contact:
+    name: BölBölÖde API Support
+    email: api@bolbolode.com
+
+servers:
+  - url: https://us-central1-{projectId}.cloudfunctions.net
+    description: Firebase Cloud Functions (Production)
+    variables:
+      projectId:
+        default: your-project-id
+  - url: https://us-central1-{projectId}.cloudfunctions.net
+    description: Firebase Cloud Functions (Staging)
+    variables:
+      projectId:
+        default: your-staging-project-id
+
+security:
+  - FirebaseAuth: []
+
+tags:
+  - name: Balance
+    description: Bakiye hesaplama işlemleri
+  - name: Debt
+    description: Borç sadeleştirme işlemleri
+  - name: Report
+    description: Rapor oluşturma
+  - name: Invite
+    description: Grup davetiyesi yönetimi
+
+paths:
+  /calculateGroupBalances:
+    post:
+      tags:
+        - Balance
+      summary: Grup bakiyelerini hesapla
+      description: |
+        Bir grup içindeki tüm üyelerin net bakiyelerini hesaplar.
+        Tüm harcamaları ve ödemeleri analiz ederek her üye için net bakiye döner.
+      operationId: calculateGroupBalances
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateBalancesRequest'
+      responses:
+        '200':
+          description: Başarılı hesaplama
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateBalancesResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Yetkilendirme hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: İzin hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Grup bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /simplifyDebts:
+    post:
+      tags:
+        - Debt
+      summary: Borç sadeleştirme
+      description: |
+        Greedy algoritma kullanarak grup içindeki borçları sadeleştirir.
+        Minimum sayıda ödeme önerisi döner.
+      operationId: simplifyDebts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimplifyDebtsRequest'
+      responses:
+        '200':
+          description: Başarılı sadeleştirme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimplifyDebtsResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Yetkilendirme hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /generateReport:
+    post:
+      tags:
+        - Report
+      summary: Rapor oluştur
+      description: |
+        Grup için PDF veya CSV formatında rapor oluşturur.
+        Harcamalar, ödemeler ve bakiyeleri içerir.
+      operationId: generateReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateReportRequest'
+      responses:
+        '200':
+          description: Rapor başarıyla oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateReportResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Yetkilendirme hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /validateInviteToken:
+    post:
+      tags:
+        - Invite
+      summary: Davet token'ını doğrula
+      description: |
+        Bir grup davetiyesi token'ının geçerliliğini kontrol eder.
+        Token geçerliyse grup bilgilerini döner.
+      operationId: validateInviteToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateInviteTokenRequest'
+      responses:
+        '200':
+          description: Token geçerli
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateInviteTokenResponse'
+        '400':
+          description: Geçersiz token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Token bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    FirebaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Firebase ID Token
+
+  schemas:
+    CalculateBalancesRequest:
+      type: object
+      required:
+        - groupId
+      properties:
+        groupId:
+          type: string
+          description: Grup ID'si
+          example: "group_abc123"
+
+    CalculateBalancesResponse:
+      type: object
+      properties:
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        calculatedAt:
+          type: string
+          format: date-time
+          description: Hesaplama zamanı
+        totalExpenses:
+          type: number
+          format: double
+          description: Toplam harcama tutarı
+        totalSettlements:
+          type: number
+          format: double
+          description: Toplam ödeme tutarı
+
+    Balance:
+      type: object
+      properties:
+        memberId:
+          type: string
+          description: Üye ID'si
+        name:
+          type: string
+          description: Üye adı
+        balance:
+          type: number
+          format: double
+          description: Net bakiye (pozitif = alacaklı, negatif = borçlu)
+        totalPaid:
+          type: number
+          format: double
+          description: Toplam ödenen tutar
+        totalOwed:
+          type: number
+          format: double
+          description: Toplam borç tutarı
+        currency:
+          type: string
+          description: Para birimi
+          example: "TRY"
+
+    SimplifyDebtsRequest:
+      type: object
+      required:
+        - groupId
+      properties:
+        groupId:
+          type: string
+          description: Grup ID'si
+          example: "group_abc123"
+
+    SimplifyDebtsResponse:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SettlementSuggestion'
+        totalTransactions:
+          type: integer
+          description: Önerilen toplam işlem sayısı
+        totalAmount:
+          type: number
+          format: double
+          description: Toplam ödeme tutarı
+
+    SettlementSuggestion:
+      type: object
+      properties:
+        fromMemberId:
+          type: string
+          description: Ödeme yapacak üye ID'si
+        fromMemberName:
+          type: string
+          description: Ödeme yapacak üye adı
+        toMemberId:
+          type: string
+          description: Ödeme alacak üye ID'si
+        toMemberName:
+          type: string
+          description: Ödeme alacak üye adı
+        amount:
+          type: number
+          format: double
+          description: Ödeme tutarı
+        currency:
+          type: string
+          description: Para birimi
+          example: "TRY"
+
+    GenerateReportRequest:
+      type: object
+      required:
+        - groupId
+        - format
+      properties:
+        groupId:
+          type: string
+          description: Grup ID'si
+          example: "group_abc123"
+        format:
+          type: string
+          enum: [pdf, csv]
+          description: Rapor formatı
+        startDate:
+          type: string
+          format: date-time
+          description: Başlangıç tarihi (ISO 8601)
+          example: "2024-01-01T00:00:00Z"
+        endDate:
+          type: string
+          format: date-time
+          description: Bitiş tarihi (ISO 8601)
+          example: "2024-12-31T23:59:59Z"
+        includeSettlements:
+          type: boolean
+          default: true
+          description: Ödemeleri dahil et
+
+    GenerateReportResponse:
+      type: object
+      properties:
+        downloadUrl:
+          type: string
+          format: uri
+          description: Rapor indirme URL'si (signed URL)
+          example: "https://storage.googleapis.com/..."
+        expiresAt:
+          type: string
+          format: date-time
+          description: URL'in geçerlilik süresi
+        format:
+          type: string
+          enum: [pdf, csv]
+          description: Rapor formatı
+        size:
+          type: integer
+          description: Dosya boyutu (bytes)
+
+    ValidateInviteTokenRequest:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: Davet token'ı
+          example: "inv_abc123xyz"
+
+    ValidateInviteTokenResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          description: Token geçerliliği
+        groupId:
+          type: string
+          description: Grup ID'si
+        groupName:
+          type: string
+          description: Grup adı
+        createdBy:
+          type: string
+          description: Davetiyi oluşturan kullanıcı ID'si
+        expiresAt:
+          type: string
+          format: date-time
+          description: Token'ın son kullanma tarihi
+        usageCount:
+          type: integer
+          description: Kullanım sayısı
+        maxUsage:
+          type: integer
+          description: Maksimum kullanım sayısı
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Hata kodu
+          example: "INVALID_REQUEST"
+        message:
+          type: string
+          description: Hata mesajı
+          example: "Geçersiz istek parametreleri"
+        details:
+          type: object
+          description: Ek hata detayları
+          additionalProperties: true
+
