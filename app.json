@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
+    "icon": "./assets/icon.png",
     "splash": {
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -14,16 +16,25 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bolbolode.app"
+      "bundleIdentifier": "com.bolbolode.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.bolbolode.app"
+      "package": "com.bolbolode.app",
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "resize"
     },
     "scheme": "bolbolode",
-    "plugins": []
+    "plugins": [],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }
-
