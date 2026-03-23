@@ -13,10 +13,6 @@ function validateBalances(balances: Balance[]): void {
     );
   }
 
-  if (balances.length < 2) {
-    throw new Error('En az 2 kişi gerekli');
-  }
-
   balances.forEach((b) => {
     if (!b.memberId || !b.name) {
       throw new Error('Geçersiz üye bilgisi');
@@ -37,6 +33,13 @@ export function simplifyDebts(
   balances: Balance[],
   minimumAmount: number = 100
 ): SettlementSuggestion[] {
+  if (balances.length === 0) {
+    return [];
+  }
+  if (balances.length < 2) {
+    return [];
+  }
+
   // Validation
   validateBalances(balances);
 
