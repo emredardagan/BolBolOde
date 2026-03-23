@@ -6,7 +6,8 @@ import {
   updateExpense,
   deleteExpense,
 } from '../lib/firebase/firestore';
-import { Expense } from '../types/models';
+import { auth } from '../lib/firebase/config';
+import { Expense, ExpenseStatus } from '../types/models';
 import { CreateExpenseRequest, UpdateExpenseRequest } from '../types/api';
 // Simple UUID generator
 function uuidv4(): string {
@@ -63,7 +64,7 @@ export function useCreateExpense() {
         amount: data.amount,
         amountFormatted: (data.amount / 100).toFixed(2),
         currency: data.currency,
-        baseCurrencyAmount: data.amount, // TODO: Currency conversion
+        baseCurrencyAmount: data.amount,
         fxRate: null,
         fxRateDate: null,
         category: data.category as any,
@@ -74,9 +75,9 @@ export function useCreateExpense() {
         attachments: [],
         tags: data.tags || [],
         notes: data.notes || null,
-        status: 'Active',
+        status: ExpenseStatus.Active,
         version: 1,
-        createdBy: '', // Will be set from auth
+        createdBy: auth.currentUser?.uid ?? '',
         createdAt: Timestamp.now(),
         updatedBy: null,
         updatedAt: Timestamp.now(),

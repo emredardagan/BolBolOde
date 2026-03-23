@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { GroupsStackParamList } from '../../navigation/types';
 import { useAuth } from '../../hooks/useAuth';
 import { useUserGroups } from '../../hooks/useGroups';
 import { Group } from '../../types/models';
 
+type GroupsNav = NativeStackNavigationProp<GroupsStackParamList, 'GroupList'>;
+
 export default function GroupListScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<GroupsNav>();
   const { user } = useAuth();
   const { data: groups, isLoading } = useUserGroups(user?.uid);
 
@@ -21,7 +25,7 @@ export default function GroupListScreen() {
   const renderGroup = ({ item }: { item: Group }) => (
     <TouchableOpacity
       className="bg-white p-4 mb-3 rounded-lg border border-gray-200"
-      onPress={() => navigation.navigate('GroupDetail' as never, { id: item.id } as never)}
+      onPress={() => navigation.navigate('GroupDetail', { id: item.id })}
     >
       <View className="flex-row items-center">
         <Text className="text-2xl mr-3">{item.emoji || '💰'}</Text>

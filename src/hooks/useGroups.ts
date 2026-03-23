@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createGroup, getUserGroups, getGroup } from '../lib/firebase/firestore';
-import { Group } from '../types/models';
+import { Group, GroupStatus } from '../types/models';
 import { CreateGroupRequest } from '../types/api';
 // Simple UUID generator
 function uuidv4(): string {
@@ -53,7 +53,7 @@ export function useCreateGroup() {
         ownerId: '', // Will be set from auth
         startDate: Timestamp.fromDate(data.startDate),
         endDate: data.endDate ? Timestamp.fromDate(data.endDate) : null,
-        status: 'Active',
+        status: GroupStatus.Active,
         memberCount: 1,
         totalExpenses: 0,
         totalAmount: 0,
