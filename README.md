@@ -94,9 +94,9 @@ src/
 - ✅ Kullanıcı kaydı ve girişi
 - ✅ Grup oluşturma
 - ✅ Grup detayları görüntüleme
-- ⏳ Harcama ekleme (geliştiriliyor)
-- ⏳ Bakiye hesaplama (geliştiriliyor)
-- ⏳ Borç sadeleştirme (geliştiriliyor)
+- ✅ Harcama ekleme (eşit bölüşüm, ödeyen otomatik katılımcı)
+- ✅ Bakiye hesaplama (kuruş paylaşımı + `balance-calculation` servisi)
+- ✅ Borç sadeleştirme (greedy öneriler + tek üye / boş grup güvenli)
 
 ## Geliştirme
 

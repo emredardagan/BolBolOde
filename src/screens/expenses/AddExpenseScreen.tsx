@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useCreateExpense } from '../../hooks/useExpenses';
-import { useGroupMembers } from '../../hooks/useGroups';
+import { useGroupMembers } from '../../hooks/useGroupMembers';
 import { CURRENCY_LIST } from '../../constants/currencies';
 import { CATEGORY_LIST } from '../../constants/categories';
 import { Currency } from '../../types/enums';
@@ -48,6 +48,12 @@ export default function AddExpenseScreen({ groupId }: AddExpenseScreenProps) {
 
     const amountMinor = toMinorUnits(parseFloat(amount), currency);
 
+    const participantSet = new Set(participantIds);
+    if (!participantSet.has(payerId)) {
+      participantSet.add(payerId);
+    }
+    const resolvedParticipantIds = Array.from(participantSet);
+
     try {
       await createExpense.mutateAsync({
         groupId,
@@ -58,7 +64,7 @@ export default function AddExpenseScreen({ groupId }: AddExpenseScreenProps) {
         date: new Date(),
         payerId,
         splitType: 'equal',
-        participantIds,
+        participantIds: resolvedParticipantIds,
       });
 
       navigation.goBack();

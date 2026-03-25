@@ -1,4 +1,12 @@
-import { Expense, GroupMember, ExpenseShare } from '../../types/models';
+import { Timestamp } from 'firebase/firestore';
+import {
+  Balance,
+  Expense,
+  ExpenseShare,
+  ExpenseStatus,
+  GroupMember,
+  SplitType,
+} from '../../types/models';
 
 /**
  * Calculate net balance for a member
@@ -55,5 +63,76 @@ export function calculateGroupBalances(
 export function validateBalancesSum(members: GroupMember[]): boolean {
   const total = members.reduce((sum, m) => sum + m.netBalance, 0);
   return Math.abs(total) <= 1; // 1 kuruş tolerance
+}
+
+/**
+ * Active expenses only (for balance math).
+ */
+export function filterActiveExpenses(expenses: Expense[]): Expense[] {
+  return expenses.filter(
+    (e) => e.status === ExpenseStatus.Active && e.deletedAt == null
+  );
+}
+
+/**
+ * Derives equal-split shares in minor units (kuruş) from expenses.
+ * Remainder kuruş are assigned to the first participants (sorted by memberId for stability).
+ */
+export function buildEqualSplitSharesFromExpenses(expenses: Expense[]): ExpenseShare[] {
+  const shares: ExpenseShare[] = [];
+  const createdAt = Timestamp.now();
+
+  for (const expense of expenses) {
+    if (expense.splitType !== SplitType.Equal) {
+      continue;
+    }
+
+    const participantIds = [...expense.participantIds].sort((a, b) =>
+      a.localeCompare(b)
+    );
+    const n = participantIds.length;
+    if (n === 0) continue;
+
+    const total = expense.baseCurrencyAmount;
+    const base = Math.floor(total / n);
+    const remainder = total % n;
+
+    participantIds.forEach((memberId, idx) => {
+      const calculatedAmount = base + (idx < remainder ? 1 : 0);
+      shares.push({
+        id: `${expense.id}-${memberId}`,
+        expenseId: expense.id,
+        memberId,
+        shareType: SplitType.Equal,
+        weight: null,
+        percentage: null,
+        exactAmount: null,
+        calculatedAmount,
+        createdAt,
+      });
+    });
+  }
+
+  return shares;
+}
+
+/**
+ * Net balances per member for UI and debt simplification (equal split only in MVP).
+ */
+export function computeMemberBalancesForGroup(
+  members: GroupMember[],
+  expenses: Expense[]
+): Balance[] {
+  const active = filterActiveExpenses(expenses);
+  const shares = buildEqualSplitSharesFromExpenses(active);
+
+  return members.map((member) => {
+    const { netBalance } = calculateMemberBalance(member.id, active, shares);
+    return {
+      memberId: member.id,
+      name: member.userId,
+      balance: netBalance,
+    };
+  });
 }
 

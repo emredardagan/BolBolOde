@@ -2,7 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useGroupMembers } from '../../hooks/useGroupMembers';
 import { useGroupExpenses } from '../../hooks/useExpenses';
-import { simplifyDebts } from '../../services/algorithms/debt-settlement';
+import {
+  adjustRoundingError,
+  simplifyDebts,
+} from '../../services/algorithms/debt-settlement';
+import { computeMemberBalancesForGroup } from '../../services/algorithms/balance-calculation';
 import { formatCurrency } from '../../services/algorithms/currency-conversion';
 import { Currency } from '../../types/enums';
 import { Balance, SettlementSuggestion } from '../../types/models';
@@ -15,26 +19,17 @@ export default function BalanceScreen({ groupId }: BalanceScreenProps) {
   const { data: members } = useGroupMembers(groupId);
   const { data: expenses } = useGroupExpenses(groupId);
 
-  // Calculate balances
-  const balances: Balance[] = members?.map((member) => {
-    // Mock calculation - should use balance calculation service
-    const paid = expenses
-      ?.filter((e) => e.payerId === member.id)
-      .reduce((sum, e) => sum + e.baseCurrencyAmount, 0) || 0;
+  const rawBalances: Balance[] =
+    members && expenses
+      ? computeMemberBalancesForGroup(members, expenses)
+      : [];
 
-    const owed = expenses
-      ?.filter((e) => e.participantIds.includes(member.id))
-      .reduce((sum, e) => sum + e.baseCurrencyAmount / e.participantIds.length, 0) || 0;
+  const balances: Balance[] = rawBalances.map((b) => ({ ...b }));
+  adjustRoundingError(balances);
 
-    return {
-      memberId: member.id,
-      name: member.userId,
-      balance: paid - owed,
-    };
-  }) || [];
-
-  // Simplify debts
-  const settlements = simplifyDebts(balances);
+  const settlements: SettlementSuggestion[] = simplifyDebts(
+    balances.map((b) => ({ ...b }))
+  );
 
   const renderBalance = ({ item }: { item: Balance }) => (
     <View className="bg-white p-4 mb-3 rounded-lg border border-gray-200">

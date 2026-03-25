@@ -9,12 +9,16 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { GroupsStackParamList } from '../../navigation/types';
 import { useCreateGroup } from '../../hooks/useGroups';
 import { useAuth } from '../../hooks/useAuth';
 import { CURRENCY_LIST } from '../../constants/currencies';
 
+type CreateNav = NativeStackNavigationProp<GroupsStackParamList, 'CreateGroup'>;
+
 export default function CreateGroupScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<CreateNav>();
   const { user } = useAuth();
   const createGroup = useCreateGroup();
   
@@ -36,7 +40,7 @@ export default function CreateGroupScreen() {
         startDate: new Date(),
       });
       
-      navigation.navigate('GroupDetail' as never, { id: group.id } as never);
+      navigation.navigate('GroupDetail', { id: group.id });
     } catch (error: any) {
       Alert.alert('Hata', error.message);
     }
